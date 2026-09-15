@@ -38,6 +38,7 @@ public class StudentDAO {
 			System.out.println("details entered");
 			
 			prepareStatement.close();
+			DatabaseConnection.receiveConnection(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -69,6 +70,7 @@ public class StudentDAO {
 			System.out.println("details updated");
 			
 			prepareStatement.close();
+			DatabaseConnection.receiveConnection(connection);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,6 +96,8 @@ public class StudentDAO {
 			update=prepareStatement.executeUpdate();
 			
 			prepareStatement.close();
+			DatabaseConnection.receiveConnection(connection);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -134,6 +138,7 @@ public class StudentDAO {
 				}
 				
 				prepareStatement.close();
+				DatabaseConnection.receiveConnection(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -175,9 +180,47 @@ public class StudentDAO {
 				students.add(student);
 			}
 			prepareStatement.close();
+			DatabaseConnection.receiveConnection(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return students;
+	}
+	
+	public Student findByName(String name)
+	{
+		Student student=new Student();
+		Connection connection=DatabaseConnection.getConnection();
+		String query="SELECT * FROM STUDENT WHERE TRIM(LOWER(NAME)) LIKE ?";
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			
+			preparedStatement.setString(1, name.trim().toLowerCase());
+			ResultSet resultSet=preparedStatement.executeQuery();
+			while(resultSet.next())
+			{
+				int retrievedId=resultSet.getInt(1);
+				String retrievedName=resultSet.getString(2);
+				double retrievedPercentage=resultSet.getDouble(3);
+				int retrievedAge=resultSet.getInt(4);
+				String retrievedCourse=resultSet.getString(5);
+				
+				
+				student.setId(retrievedId);
+				student.setName(retrievedName);
+				student.setPercentage(retrievedPercentage);
+				student.setAge(retrievedAge);
+				student.setCourse(retrievedCourse);
+			}
+			preparedStatement.close();
+			DatabaseConnection.receiveConnection(connection);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(student.getName()!=null)
+			return student;
+		else
+			return null;
 	}
 }

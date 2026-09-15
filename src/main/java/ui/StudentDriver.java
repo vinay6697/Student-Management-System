@@ -19,6 +19,7 @@ public class StudentDriver {
 			System.out.println("Enter 3 to delete student ");
 			System.out.println("Enter 4 to find student ");
 			System.out.println("Enter 5 to findAll students ");
+			System.out.println("Enter 6 to find students by name");
 			
 			int choice=sc.nextInt();
 			
@@ -114,6 +115,29 @@ public class StudentDriver {
 						System.out.println("Student age is:\t\t|"+student.getAge());
 						System.out.println("Student course is:\t|"+student.getCourse());
 						System.out.println("-------------------------------------------------");
+					}
+					break;
+				}
+				case 6:{
+					sc.nextLine();
+					System.out.println("Enter the name");
+					String name=sc.nextLine();
+					
+					Student student=service.findByName(name);
+					
+					System.out.println("-------------------------------------------------");
+					if(student!=null)
+					{
+						System.out.println("Student id is:\t\t|"+student.getId());
+						System.out.println("Student name is:\t|"+student.getName());
+						System.out.println("Student percentage is:\t|"+student.getPercentage());
+						System.out.println("Student age is:\t\t|"+student.getAge());
+						System.out.println("Student course is:\t|"+student.getCourse());
+						System.out.println("-------------------------------------------------");
+					}
+					else
+					{
+						System.out.println("no student found");
 					}
 					break;
 				}

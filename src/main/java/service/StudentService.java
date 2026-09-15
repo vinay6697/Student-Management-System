@@ -59,4 +59,8 @@ public class StudentService {
 		return dao.findAll();
 	}
 
+	public Student findByName(String name)
+	{
+		return dao.findByName(name);
+	}
 }
