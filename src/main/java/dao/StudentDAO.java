@@ -22,9 +22,10 @@ public class StudentDAO {
 	 */
 	public void save(int id,String name,double percentage,int age,String course)
 	{
+		Connection connection=null;
 		String insertQuery="INSERT INTO student VALUES(?,?,?,?,?)";
 		try {
-			Connection connection=DatabaseConnection.getConnection();
+			connection=DatabaseConnection.getConnection();
 			PreparedStatement prepareStatement=connection.prepareStatement(insertQuery);
 			
 			
@@ -38,9 +39,12 @@ public class StudentDAO {
 			System.out.println("details entered");
 			
 			prepareStatement.close();
-			DatabaseConnection.receiveConnection(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+				DatabaseConnection.receiveConnection(connection);
 		}
 	}
 	
@@ -56,9 +60,10 @@ public class StudentDAO {
 	 */
 	public void update(int id,String name,double percentage,int age,String course)
 	{
+		Connection connection=null;
 		String updateQuery="UPDATE student SET name=?,perc=?,age=?,course=? WHERE id=?";
 		try {
-			 Connection connection=DatabaseConnection.getConnection();
+			 connection=DatabaseConnection.getConnection();
 			PreparedStatement prepareStatement=connection.prepareStatement(updateQuery);
 			prepareStatement.setString(1, name);
 			prepareStatement.setDouble(2,percentage);
@@ -70,10 +75,13 @@ public class StudentDAO {
 			System.out.println("details updated");
 			
 			prepareStatement.close();
-			DatabaseConnection.receiveConnection(connection);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+				DatabaseConnection.receiveConnection(connection);
 		}
 	}
 	
@@ -85,10 +93,11 @@ public class StudentDAO {
 	 */
 	public int delete(int id)
 	{
+		Connection connection =null;
 		int update=0;
 		String deleteQuery="DELETE FROM student WHERE id=?";
 		try {
-			 Connection connection=DatabaseConnection.getConnection();
+			 connection=DatabaseConnection.getConnection();
 			 
 			PreparedStatement prepareStatement=connection.prepareStatement(deleteQuery);
 			prepareStatement.setInt(1,id);
@@ -96,10 +105,13 @@ public class StudentDAO {
 			update=prepareStatement.executeUpdate();
 			
 			prepareStatement.close();
-			DatabaseConnection.receiveConnection(connection);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+				DatabaseConnection.receiveConnection(connection);
 		}
 		return update;
 	}
@@ -112,11 +124,12 @@ public class StudentDAO {
 	 */
 	public Student findBy(int id)
 	{
+		Connection connection =null;
 		Student student=new Student();
 		
 		String selectQuery="SELECT * FROM student WHERE id=?";
 		try {
-			 Connection connection=DatabaseConnection.getConnection();
+			 connection=DatabaseConnection.getConnection();
 			PreparedStatement prepareStatement=connection.prepareStatement(selectQuery);
 			
 			prepareStatement.setInt(1,id);
@@ -138,9 +151,14 @@ public class StudentDAO {
 				}
 				
 				prepareStatement.close();
-				DatabaseConnection.receiveConnection(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+			{
+				DatabaseConnection.receiveConnection(connection);
+			}
 		}
 		return student;
 	}
@@ -153,10 +171,11 @@ public class StudentDAO {
 	 */
 	public List<Student> findAll()
 	{
+		 Connection connection=null;
 		List<Student> students=new ArrayList<>();
 		String selectQuery="SELECT * FROM student";
 		try {
-			 Connection connection=DatabaseConnection.getConnection();
+			 connection=DatabaseConnection.getConnection();
 
 			PreparedStatement prepareStatement=connection.prepareStatement(selectQuery);
 			ResultSet resultSet=prepareStatement.executeQuery();
@@ -180,17 +199,26 @@ public class StudentDAO {
 				students.add(student);
 			}
 			prepareStatement.close();
-			DatabaseConnection.receiveConnection(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+				DatabaseConnection.receiveConnection(connection);
 		}
 		return students;
 	}
 	
+	/**
+	 * used to search the student details by using their name
+	 * if found it returns the student object 
+	 * or if not found returns the null
+	 */
 	public Student findByName(String name)
 	{
-		Student student=new Student();
 		Connection connection=DatabaseConnection.getConnection();
+
+		Student student=new Student();
 		String query="SELECT * FROM STUDENT WHERE TRIM(LOWER(NAME)) LIKE ?";
 		try {
 			PreparedStatement preparedStatement=connection.prepareStatement(query);
@@ -213,11 +241,17 @@ public class StudentDAO {
 				student.setCourse(retrievedCourse);
 			}
 			preparedStatement.close();
-			DatabaseConnection.receiveConnection(connection);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			if(connection!=null)
+			{
+				DatabaseConnection.receiveConnection(connection);
+			}
+		}
+		
 		if(student.getName()!=null)
 			return student;
 		else
