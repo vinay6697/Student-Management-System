@@ -222,7 +222,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement=connection.prepareStatement(query);
 			
-			preparedStatement.setString(1, name.trim().toLowerCase());
+			preparedStatement.setString(1, "%" +name.trim().toLowerCase()+ "%");
 			ResultSet resultSet=preparedStatement.executeQuery();
 			while(resultSet.next())
 			{
@@ -262,12 +262,12 @@ public class StudentDAO {
 		Connection connection=null;
 		List<Student> students=new ArrayList<>();
 		
-		String query="SELECT * FROM STUDENT WHERE TRIM(LOWER(COURSE))= ?";
+		String query="SELECT * FROM STUDENT WHERE TRIM(LOWER(COURSE)) LIKE ?";
 		try {
 			connection=DatabaseConnection.getConnection();
 			PreparedStatement preparedStatement=connection.prepareStatement(query);
 			preparedStatement.setString(1,
-					course.trim().toLowerCase());
+					"%" +course.trim().toLowerCase()+ "%");
 			
 			ResultSet resultSet=preparedStatement.executeQuery();
 			
