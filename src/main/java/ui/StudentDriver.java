@@ -20,6 +20,7 @@ public class StudentDriver {
 			System.out.println("Enter 4 to find student ");
 			System.out.println("Enter 5 to findAll students ");
 			System.out.println("Enter 6 to find students by name");
+			System.out.println("Enter 7 to find students entrolled to particular course");
 			
 			int choice=sc.nextInt();
 			
@@ -139,6 +140,29 @@ public class StudentDriver {
 					{
 						System.out.println("no student found");
 					}
+					break;
+				}
+				case 7:{
+					System.out.println("Enter the course name");
+					sc.nextLine();
+					String course=sc.nextLine();
+					
+					List<Student> students=service.findByCourse(course);
+					System.out.println("-------------------------------------------------");
+					if(students!=null)
+					{
+						for(Student student:students)
+						{
+							System.out.println("Student id is:\t\t|"+student.getId());
+							System.out.println("Student name is:\t|"+student.getName());
+							System.out.println("Student percentage is:\t|"+student.getPercentage());
+							System.out.println("Student age is:\t\t|"+student.getAge());
+							System.out.println("Student course is:\t|"+student.getCourse());
+							System.out.println("-------------------------------------------------");
+						}
+					}
+					else
+						System.out.println("no students found for the "+course+" course");
 					break;
 				}
 				default:{

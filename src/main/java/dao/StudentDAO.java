@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import connection.DatabaseConnection;
 import model.Student;
 
@@ -254,6 +253,54 @@ public class StudentDAO {
 		
 		if(student.getName()!=null)
 			return student;
+		else
+			return null;
+	}
+	
+	public List<Student> findByCourse(String course)
+	{
+		Connection connection=null;
+		List<Student> students=new ArrayList<>();
+		
+		String query="SELECT * FROM STUDENT WHERE TRIM(LOWER(COURSE))= ?";
+		try {
+			connection=DatabaseConnection.getConnection();
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			preparedStatement.setString(1,
+					course.trim().toLowerCase());
+			
+			ResultSet resultSet=preparedStatement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				Student student=new Student();
+				
+				int retrievedId=resultSet.getInt(1);
+				String retrievedName=resultSet.getString(2);
+				double retrievedPercentage=resultSet.getDouble(3);
+				int retrievedAge=resultSet.getInt(4);
+				String retrievedCourse=resultSet.getString(5);
+				
+				student.setId(retrievedId);
+				student.setName(retrievedName);
+				student.setPercentage(retrievedPercentage);
+				student.setAge(retrievedAge);
+				student.setCourse(retrievedCourse);
+				
+				System.out.println(retrievedName);
+				
+				students.add(student);
+			}
+			System.out.println(students.size());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+				DatabaseConnection.receiveConnection(connection);
+		}
+		if(students.size()!=0)
+			return students;
 		else
 			return null;
 	}

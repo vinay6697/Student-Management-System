@@ -54,6 +54,7 @@ public class DatabaseConnection {
 	
 	public static void receiveConnection(Connection connection)
 	{
+		System.out.println("connection is closing");
 		if(connectionPool.size()<pool_size)
 			connectionPool.add(connection);
 		else
